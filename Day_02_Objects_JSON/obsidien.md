@@ -410,3 +410,275 @@ const obj = JSON.parse(text);
 ```
 
 ---
+
+## 10. Asynchronous Operations
+
+## JS provides three main ways to manage asynchronous tasks:
+
+### 1. Callbacks:
+
+    - THE TRADITIONAL APPROACH USING FUNCTIONS PASSED AS ARGUMENTS
+    - CAN LEAD TO SEVERAL CALLBACKS WITH NESTED FUNCTIONS, MAKING CODE HARD TO READ
+    - REQUIRES MANUAL CHECKS AND CAN BE A HEADACHE IN NESTED CALLBACKS
+    - CONTROL FLOW IS SEQUENTIAL
+    - USAGE: SOMETIMES YOU DON'T WANT TO DO SOMETHING RIGHT AWAY, YOU WANT TO WAIT UNTIL ANOTHER TASK IS DONE. THAT'S WHAT CALLBACKS ARE FOR.
+
+> [!NOTE] Real-Life Analogy: Ordering Pizza
+> Imagine you call a pizza place and say: "Deliver the pizza, and when it arrives, call me."
+> That "call me" part is the CALLBACK -- you're telling them what to do after the pizza is delivered.
+
+```js
+//This is the callback function i.e. once finished, do this
+function notifyDelivery() {
+  console.log("Pizza has been delivered! 🍕");
+}
+
+//This function takes a callback
+function orderPizza(callback) {
+  console.log("Ordering pizza...");
+  //Simulate a delay (waiting for delivery)
+  setTimeout(() => {
+    console.log("Pizza is here!");
+    callback(); //Call the callback function
+  }, 2000); // 2 seconds delay
+}
+
+//Call the function and pass the callback
+orderPizza(notifyDelivery);
+/*
+	out:
+	Ordering pizza... (then 2 sec delay)
+	Pizza is here!
+	Pizza has been delivered! 🍕
+*/
+```
+
+#### What is happening behind the scene?
+
+1. `orderPizza(notifyDelivery)` is called.
+2. It logs "Ordering pizza..." to the screen
+3. After 2 seconds, it logs "Pizza is here!"
+4. Then it calls `notifyDelivery()`, which logs "Pizza has been delivered! 🍕"
+
+---
+
+### 2. Promises:
+
+##### --> A promise is like a placeholder for a value that you'll get in the future.
+
+    - A BETTER ALTERNATIVE THAT IMPROVES READABILITY AND AVOIDS CALLBACK NESTING
+    - OBJECTS REPRESENTING EVENTUAL COMPLETION OR FAILURE OF AN ASYNC OPERATION
+    - ALLOWS CHAINING WITH .then() AND .catch(), IMPROVING READABILITY
+    - ERRORS ARE HANDLED USING .catch()
+    - CONTROL FLOW IS CHAINING
+
+> [!NOTE] Real-Life Analogy: Buying Ice Cream
+> Imagine you ask your friend:
+> "Can you get me ice cream? If you did, I'll feel happy. If not, I'll be sad."
+> That's exactly what a PROMISE does --it either fulfills (happy) or rejects (sad)
+
+```js
+//A function that returns a Promise
+function getIceCream() {
+  return new Promise((resolve, reject) => {
+    const hasIceCream = true;
+    if (hasIceCream) {
+      resolve("Here's your ice cream! 🍦");
+    } else {
+      reject("Sorry, no ice cream today. 🥲");
+    }
+  });
+}
+
+//Using the promise
+getIceCream()
+  .then((message) => {
+    console.log("Success: ", message);
+  })
+  .catch((error) => {
+    console.log("Failure: ", error);
+  });
+
+//Out: Success:  Here's your ice cream! 🍦
+```
+
+#### What is happening behind the scene?
+
+1. `getIceCream()` returns a Promise.
+2. Inside the Promise:
+   - If hasIceCream is _true_, it calls `resolve(...)` -> Success!
+   - If _false_, it calls `reject(...)` -> failure
+3. `.then(...)` handles success case.
+4. `.catch(...)` handles the failure case.
+
+---
+
+### 3. Async/ Await:
+
+##### --> `Async` makes a function return a _PROMISE_, `Await` pauses the execution of the `Async` function, until the Promise is resolved or rejected. (i.e. It's like saying: "Wait here until I get the result, then continue.")
+
+    - A MODERN AND CLEANER SYNTAX THAT MAKES ASYNCHRONOUS CODE LOOK SYNCHRONOUS
+    - SYNTACTIC SUGER OVER PROMISES, USING async FUNCTIONS AND await EXPRESSIONS
+    - UTILIZES try...catch BLOCKS, SIMPLIFYING ERROR HANDLING.
+    - CONTROL FLOW IS ASYNCHRONOUS IN A SYNCHRONOUS MANNER.
+
+> [!NOTE] Real-Life Analogy: Waiting for Donuts
+> Imagine you ask a friend to bring you donuts. You wait patiently until they arrive, then you eat. That's exactly what await does --it waits for the Promise to finish before moving on.
+
+```js
+//A function that returns a promise
+function getDonut() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Here's your donut! 🍩");
+    }, 2000);
+  });
+}
+
+//An async function that waits for the donut
+async function eatDonut() {
+  console.log("Waiting for the donut...");
+  const donut = await getDonut(); //Waits here until the promise resolves
+  console.log(donut);
+  console.log("Yum! Donut eaten.");
+}
+
+//Start the process
+eatDonut();
+
+/*
+	Out:
+	Waiting for the donut... (delayed 2 sec first)
+	Here's your donut! 🍩
+	Yum! Donut eaten.
+*/
+```
+
+#### What is happening behind the scene?
+
+1. `eatDonut()` is called
+2. It logs: "Waiting for the donut..."
+3. It calls `getDonut()` and waits 2 seconds
+4. After 2 seconds, `getDonut()` resolves with "Here's your donut! 🍩".
+5. That value is then stored in the _donut_ variable
+
+### Similarity between the three:
+
+- All these three are designed to handle the results of _asynchronous_ operations.
+- They all handle errors in their own way, **Callbacks** use the error first convention, Promises use the .catch() method, and Async/Await uses try and catch block.
+- Callbacks, Promises, and Async/Await they all operate on the JavaScript event loop.
+
+---
+
+## 11. Exception Handling in JS
+
+The process of dealing with errors (exceptions) that occur during the execution of a program. JS provides some mechanisms to catch, handle and recover from error instead of letting the error stop the program. The most common approach is try...catch blocks.
+
+#### --> Try-Catch blocks:
+
+    - TRY BLOCK: PLACE CODE THAT MAY POTENTIALLY THROW AN ERROR HERE
+    - CATCH BLOCK: THIS BLOC EXECUTES IF AN ERROR OCCURS IN THE TRY BLOCK
+    - FINALLY BLOCK: CODE INSIDE THIS BLOCK WILL ALWAYS RUN, WHETHER AN ERROR OCCURED OR NOT.
+
+```js
+try {
+  let result = 10 / 0; // Undefined
+  if (!isFinite(result)) {
+    throw new Error("Cannot divide by zero!"); //Specific error
+  }
+  console.log(result);
+} catch (error) {
+  console.error("Error occured: ", error.message); //Only if error
+} finally {
+  console.log("Execution completed"); //Always executes
+}
+/*
+	Out:
+	Error occured:  Cannot divide by zero!
+	Execution completed
+*/
+```
+
+#### --> Throwing Custom Errors:
+
+- Sometimes the standard JS errors are not sufficient for our application needs. That's where we turn to Custom Errors.
+
+```js
+function check(age) {
+  if (age < 18) {
+    throw new Error("Age must be 18 or above");
+  }
+  console.log("Access granted");
+}
+try {
+  check(16);
+} catch (error) {
+  console.error(error.message); //Out: Age must be 18 or above
+}
+```
+
+#### --> Advanced try...catch with Async/Await
+
+```js
+async function fetchData() {
+  try {
+    let result = await fetch("https://api.example.com/data");
+    let data = await result.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data: ", error.message);
+  }
+}
+fetchData(); //Out: Error fetching data:  fetch failed
+```
+
+_Explaining this code:_
+
+1. `fetchData()` is an _async_ function, so it can use _await_
+2. It tries to:
+   - Fetch data from "https://api.example.com/data" using `fetch()`
+   - Convert the response to JSON using `.json()`
+   - Log the result
+3. If anything goes wrong, it catches the error and logs: "Error fetching data: <error_message>"
+
+---
+
+## 12. Export / Import
+
+###### Why do we need to use export and import in JS ??
+
+1. Modularity:
+   - You can split your code into multiple files (modules), each focused on a specific task.
+   - This makes your code easier to read, debug and maintain.
+2. Reusability:
+   - You can reuse functions, variables, or classes across different files without rewriting them.
+3. Avoid Global Scope:
+   - Without modules, everything lives in the global scope, which can lead to naming conflicts and bugs.
+   - Modules keep variables and functions scoped to their own file unless explicity exported.
+
+```js
+// -------------------- In modules.js file -------------------
+export function add(a, b) {
+  // you can just type export before
+  return a + b;
+}
+// or you can explicitly export everything in the end of the file
+export const PI = 3.14159;
+
+//---------------------In utils.js file -----------------------
+import { add, PI } from "./modules.js";
+
+console.log(add(2, 4)); //Out: 6
+console.log(PI); //Out: 3.14159
+```
+
+##### --> Types of Export:
+
+| Type           | Syntax               | Example                           |
+| -------------- | -------------------- | --------------------------------- |
+| Named Export   | export { _sth_ }     | export function greet () {}       |
+| Import Named   | import { _sth_ }     | import { _sth_ } from './file.js' |
+| Default Export | export default _sth_ | export default function () {}     |
+| Import Default | import _sth_         | import _sth_ from './file.js'     |
+
+---
