@@ -1,0 +1,8 @@
+POST http://localhost:3000/hello/users/
+Content-Type: application/json
+
+{
+    "name" : "New Friend",
+    "hobby" : "Reading",
+    "local" : false
+}
