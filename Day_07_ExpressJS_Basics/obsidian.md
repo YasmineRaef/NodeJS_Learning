@@ -101,10 +101,10 @@ We can actually make HTTP requests and view the response directly within the edi
 
 1. Installing the REST extension in VS Code.
 2. Create a file named `api.http` in your project directory and type the following:
-   ![[ExpressBasics_RESTcode.png]]
+   ![[![ExpressBasics_RESTcode.png](images/ExpressBasics_RESTcode.png)]]
 
 3. Now run your `index.js` file, then press on the (Send Request) that is shown through the errors in your `api.http` file to make the HTTP request. The following `Response` will appear:
-   ![[ExpressBasics_REST_Example.png]]
+   ![[![ExpressBasics_REST_Example.png](images/ExpressBasics_REST_Example.png)]]
 
 ---
 
@@ -225,10 +225,10 @@ app.listen(PORT, () => {
 ```
 
 --> output from the reponse on REST:
-![[ExpressBasics_REST_response.png]]
+![[![ExpressBasics_REST_response.png](images/ExpressBasics_REST_response.png)]]
 
 Now, our server will look like this:
-![[ExpressBasics_Server_api_books.png]]
+![[![ExpressBasics_Server_api_books.png](images/ExpressBasics_Server_api_books.png)]]
 
 ##### Let's add a condition in retrieving our list, instead of retrieving all the data in the list, let's just retreive the books that are already read:
 
@@ -257,7 +257,7 @@ Now, our server will look like this:
 - The next middleware function ( `next` )
 
 Technically, an Express application is a series of middleware function calls as shown:
-![[ExpressBasics_Middleware.png]]
+![[![ExpressBasics_Middleware.png](images/ExpressBasics_Middleware.png)]]
 
 To define a middleware function:
 
