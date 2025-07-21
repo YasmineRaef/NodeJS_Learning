@@ -53,15 +53,14 @@ app.listen(PORT, () => {
      	"password": "Securepass@123"
      }
      ```
-
-````
-	- `const user = {name, email, password};` :
-		- You are grouping the extracted info into a _user object_ which is useful for saving to a database or logging in the future.
-	- `res.status(201).json({})` :
-		- This sends a _JSON response_ with HTTP status 201 (Created).
-		- Confirms successful registration
+   - `const user = {name, email, password};` :
+     - You are grouping the extracted info into a _user object_ which is useful for saving to a database or logging in the future.
+   - `res.status(201).json({})` :
+     - This sends a _JSON response_ with HTTP status 201 (Created).
+     - Confirms successful registration
 
 Now, let's continue with our app, let's send a _Valid request_ using POSTMAN, or _REST CLIENT_ we installed last time:
+
 ```js
 //---------------- file_api.http -------------------
 POST http://localhost:3000/register
@@ -73,7 +72,7 @@ Content-Type: "application/json"
 	"password": "Securepass@12345"
 }
 
-````
+```
 
 Now, click the send request as shown pointed red arrow below:
 ![[![Express_inter_send_req.png](images/Express_inter_send_req.png)]]
